@@ -6,7 +6,8 @@ $levels = array(
   '3' => 'Difficile'
 );
 
-function getLevelName($levels, $key){
+function getLevelName($levels, $key) {
   return $levels[$key];
 }
+
 ?>

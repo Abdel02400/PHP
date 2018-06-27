@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block css %}
+  <style>
+  #btnListFruits { display: none }
+  .fruitName { cursor: pointer }
+  img.logo {
+    width: 150px;
+    border: 1px #555 solid;
+    border-radius: 4px
+  }
+  .custom-active {
+    background-color: orange !important;
+    color: white
+  }
+  </style>
+{% endblock %}
+
+{% block body %}
+
+<h2>Ajax</h2>
+
+<div id="app">
+  <button id="btnTestAjax" type="button">Test ajax</button>
+  <button id="btnListFruits" type="button">liste des fruits</button>
+  Afficher en tant que
+  <select id="selectFormat">
+    <option value="table">Tableau</option>
+    <option value="list">Liste</option>
+  </select>
+
+  <input id="cbComestible" type="checkbox" checked>Comestible
+  <input id="cbNotComestible" type="checkbox" checked>Non comestible
+
+  <input id="search" type="text" placeholder="Recherche par mots-clés">
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8">
+        <div id="fruitDisplay"></div>
+      </div>
+      <div class="col-md-4">
+        <div id="fruitDetail"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+{% endblock %}
+
+{% block js %}
+<script src="{{asset('js/client.js')}}"></script>
+{% endblock %}

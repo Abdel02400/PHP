@@ -3,42 +3,46 @@ include_once('Product.php');
 
 class Book extends Product {
 
-  //private innacessible a partir de l'exterieur
-  //accessible seulement a l'interieur de la classe
-  //Non ecrasable par une classe heritiere
-  //SI la classe fille definit une propiete portant le meme Nom
-  //que dans la classe mere => doublon genere
+  /*
+  private: inaccessible depuis l'extérieur,
+  accessible seulement à l'intérieur de la classe.
+  Non "écrasable" par une classe héritière.
+  Si la classe fille définit une propriété portant le même
+  nom que dans la classe mère => doublon généré
 
-  //protected innacessible a partir de l'exterieur
-  //accessible seulement a l'interieur de la classe
-  //Non ecrasable par une classe heritiere
-  //SI la classe fille definit une propiete portant le meme Nom
-  //que dans la classe mere => Cette propriete
+  protected: inaccessible depuis l'extérieur,
+  accessible seulement à l'intérieur de la classe.
+  "Ecrasable" par une classe héritière.
+  Si la classe fille définit une propriété portant le même
+  nom que dans la classe mère => cette propriété remplace celle provenant
+  de la classe mère
 
-  //publmic accessible a partir de l'exterieur
-  //accessible seulement a l'interieur de la classe
-  //Non ecrasable par une classe heritiere
-  //SI la classe fille definit une propiete portant le meme Nom
-  //que dans la classe mere => cette propriete remplace celle provement de la classe mere
+  public: accessible depuis l'extérieur.
+  "Ecrasable" par une classe héritière.
+  Si la classe fille définit une propriété portant le même
+  nom que dans la classe mère => cette propriété remplace celle provenant
+  de la classe mère
+  */
 
-
+  private $price = 12.3;
   private $nbPages = NULL;
-  private $price = 14.9;
-  public $test = "public test product";
-  protected $test2 = "protected test2 product";
+  public $test = "public test Book";
+  protected $test2 = "protected test2 Book";
 
-  //le constructeur de l'enfant remplace celui du ParentIterator
-  //il ne peut y avoir qu'un seul constructeur par classe
+  // le constructeur de l'enfant remplace celui du parent
+  // il ne peut y avoir qu'une seul constructeur par classe
   public function __construct() {
 
   }
 
-  public function getTest2(){
-    return $this->test2; // renvoi le contenu de la propriété protégé
+  public function getTest2() {
+    return $this->test2; // renvoie la valeur de la propriété protégée
   }
+
   public function getNbPages() {
     return $this->nbPages;
   }
+
   public function setNbPages($nbPages) {
     $this->nbPages = $nbPages;
     return $this->nbPages;
@@ -46,4 +50,4 @@ class Book extends Product {
 
 }
 
-?>
+ ?>

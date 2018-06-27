@@ -1,0 +1,101 @@
+*** EXOS ***
+
+--
+A l'intérieur de TestController, ajouter une route '/fruits/list'
+qui renverra au client la liste des fruits
+--
+
+--
+Au niveau du template fruits.html.twig,
+Pour l'affichage du tableau fruits3,
+Afficher "Dangereux" si le fruit n'est pas comesible,
+sinon afficher "Aucun risque connu"
+--
+
+--
+Pour chaque fruit du tableau $fruits3, ajouter une propriété
+"wiki" qui contiendra l'url de la page wikipedia concernant ce fruit
+ou bien la valeur NULL si aucun article existe
+Au niveau du template, si la propriété wiki n'est pas nulle, afficher
+un lien renvoyant vers l'article
+--
+
+--
+Styliser avec boostrap les balises <table> du template fruits.html.twig
+--
+
+--
+Dans TestController ajouter une route /fruits-comestibles
+cette route affichera un tableau de fruits comestibles (utiliser
+comme source de données le tableau $fruits3)
+Ajouter cette route au menu principal
+--
+
+--
+Créer une page de détails (producer_details) pour les producteurs
+Sur la page fruit_details, afficher sous forme de lien le nom
+du producteur (renvoi vers la page détails du producteur)
+--
+
+--
+Dans la page fruit_details afficher le logo du producteur à côté
+de son nom
+--
+
+--
+Créer une route /fruits/category/{name}
+Le template associé à cette route affichera
+la liste des fruits liés au nom de catégorie passé dans l'URL
+exemple: /fruits/category/Cuisine affichera les fruits liés
+à la catégorie Cuisine
+--
+
+--
+Au clic sur le bouton btnListFruits
+Afficher les fruits sous forme de tableau HTML avec 4 colonnes
+(nom, origine, comestible, producteur)
+--
+
+--
+Le clic sur le nom du fruit doit envoyer une requête ajax au serveur
+l'identifiant du fruit devra figurer dans la requête
+exemple d'url : http://localhost:8000/fruits/api/details/{id}
+--
+
+--
+Au changement d'affichage (list ou table), effacer le contenu du div detailFruit
+--
+
+--
+En format list, rendre les li clicables afin de charger les détails
+du fruit concerné dans le div detailFruit
+--
+
+--
+Dans le tableau, lorsqu'un nom de fruit est cliqué, changer l'apparence de la
+ligne (tr) correspondante afin de mettre en évidence le fruit "actif"
+
+Méthodes jQuery suggérées:
+  .parent() : à partir d'un élément ciblé, monte d'un niveau dans le dom
+  .addClass(), removeClass(), .toggleClass(), .css()
+--
+
+--
+Rechercher la chaîne saisie également dans la propriété .origin
+--
+
+--
+Ajouter une colonne dans le tableau de fruits côté client
+Placer dans cette colonne une icône de pouce levé (thumbup)
+Le clic sur cette icône enverra une requête ajax post
+vers l'adresse suivante : /fruits/api/like
+
+En base de données, vous devrez incrémenter le nombre de "like"
+associés au fruit concerné (ajouter une propriété "like" à
+l'entité Fruit)
+
+Le nombre de "like" apparaîtra entre parenthèses à côté de l'icône
+
+Au rafraîchissement de la page client, le nombre de "like" enregistrés
+pour chaque fruit devra être affiché
+--

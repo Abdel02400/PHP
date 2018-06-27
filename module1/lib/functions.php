@@ -1,82 +1,123 @@
 <?php
+include_once('../datasource.php');
 
-function verif1($str) {
+function majusculeInitiale($str) {
+  // dans la version actuelle, les caractères accentués
+  // ne sont pas convertis en majuscule
 
-  $initial = $str[0];
-  $reste = substr($str , 1);
-  $initialMajus = strtoupper($initial);
+  $initiale = $str[0]; // équivalent à substr($str, 0, 1);
+  $reste = substr($str, 1);
+  $initialeMajus = strtoupper($initiale);
   $resteMinus = strtolower($reste);
 
-  return $initialMajus . $reste;
+  return $initialeMajus . $resteMinus;
 }
 
-function afficheallnote($tab) {
+function derniereNote($notes) {
+  // renvoie la dernière note si le tableau $notes n'est pas vide
+  // renvoie "aucune note" si le tableau $notes est vide
 
-  $nbrnote = sizeof($tab);
-  $resultat = "";
-  if ($nbrnote === 0) {
+  $nb_notes = sizeof($notes);
 
-    $resultat = "Aucune Note";
-    return $resultat;
-  }
-  else {
-
-    foreach($tab as $i){
-      $resultat .= $i . " , ";
-    }
-    return $resultat;
+  if ($nb_notes == 0) {
+    return AUCUNE_NOTE_MSG;
+  } else {
+    return $notes[$nb_notes - 1];
   }
 }
 
-function afficherdernierenote($tab) {
+function moyenne($notes, $precision) {
+  $nb_notes = sizeof($notes);
 
-  $nbrnote = sizeof($tab);
-  if ($nbrnote === 0) {
+  if ($nb_notes == 0) return AUCUNE_NOTE_MSG;
+  if ($nb_notes == 1) return $notes[0];
 
-    $resultat = AUCUNE_NOTE_MSG ;
-    return $resultat;
+  $somme = 0;
+  foreach($notes as $note) {
+    $somme += $note; // équivalent à $somme = $somme + $note
   }
-  else {
-
-    $resultat = $tab[$nbrnote - 1];
-    return $resultat;
-  }
+  return round($somme / $nb_notes, $precision);
 }
 
-function affichermoyenne($tab){
-
-  $moyenne = 0;
-  $nbrnote = sizeof($tab);
-  if ($nbrnote === 0) {
-
-    $resultat = "Aucune Moyenne";
-    return $resultat;
-  }
-  else {
-
-    foreach($tab as $i){
-      $moyenne += $i;
-    }
-
-    $resultat = round(($moyenne/$nbrnote), 2);
-
-    if($resultat < 10) {
-
-      $resultat = "<span style='color:red'>" . $resultat . "</span>";
-    }
-    return $resultat;
-  }
-}
+// variante syntaxique, même résultat
+// function moyenne($notes, $precision) {
+//   $nb_notes = sizeof($notes);
+//
+//   if ($nb_notes == 0) {
+//     return AUCUNE_NOTE_MSG;
+//   } elseif($nb_notes == 1) {
+//     return $notes[0];
+//   } else {
+//     $somme = 0;
+//     foreach($notes as $note) {
+//       $somme += $note; // équivalent à $somme = $somme + $note
+//     }
+//     return round($somme / $nb_notes, $precision);
+//   }
+// }
 
 function afficheStagiaireDetails($stagiaire) {
-
   $output = '';
-  $output .= '<div class="col-md-9">';
-  $output .= '<h2>Infos concernant le stagiaire ' . strtoupper($stagiaire['nom']) . " " . verif1($stagiaire['prenom']) . '</h2>';
-  $output .= '<img src="' . ASSETS_PATH . 'img/totems/' . $stagiaire['totem'] . '" alt ="" style="width:100%"';
+  $output .= '<div class="stagiaire">';
+  $output .= '<h2>'.$stagiaire['nom'].'</h2>';
+  $output .= '<img src="'.ASSETS_PATH.'img/totems/' . $stagiaire['totem'] . '" alt=""/>';
   $output .= '</div>';
 
   return $output;
+}
+
+function meilleurStagiaire($stagiaires) {
+  // @in: tableau des stagiaires
+  // @out: stagiaire ayant la meilleure moyenne + moyenne + indice
+  $meilleurMoyenne = moyenne($stagiaires[0]['notes'], 2); // le premier par défaut
+  $meilleurStagiaire = NULL;
+  $indice = NULL;
+
+  $i = 0;
+  foreach($stagiaires as $s) {
+    if (moyenne($s['notes'], 2) > $meilleurMoyenne) {
+      $meilleurMoyenne = moyenne($s['notes'], 2);
+      $meilleurStagiaire = $s;
+      $indice = $i;
+    }
+    $i++;
+  }
+  return array(
+    'stagiaire' => $meilleurStagiaire,
+    'moyenne' => $meilleurMoyenne,
+    'indice' => $indice
+  );
+
+}
+
+function meilleursStagiaires($stagiaires, $limit) {
+  // @In stagiaires: source de données
+  // @In limit: nombre de stagiaires à renvoyer
+  // @out: tableau de stagiaires + moyennes
+  $i = 0;
+  $meilleursStagiaires = array();
+  while ($i < $limit) {
+    $meilleur = meilleurStagiaire($stagiaires);
+    array_push($meilleursStagiaires, $meilleur);
+    array_splice($stagiaires, $meilleur['indice'], 1);
+    $i++;
+  }
+
+  return $meilleursStagiaires;
+}
+
+function verifieIdentite($info, $stagiaires) {
+  // @In info: superglobale $_POST
+  // @In stagiaires: source de données dans laquelle on recherche
+  // @Out bool (true ou false)
+  $found = false;
+  foreach($stagiaires as $s) {
+    if (($s['nom'] == $info['nom']) && ($s['password'] == $info['password'])) {
+      $found = true;
+      break;
+    }
+  }
+  return $found;
 }
 
 ?>

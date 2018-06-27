@@ -1,27 +1,37 @@
 <?php
 include('datasource.php');
-$stagiaire = listeStagiaires();
-session_start();
+include('lib/functions.php');
+include('header.php');
 
+//print_r($_SERVER);
+$method = $_SERVER['REQUEST_METHOD'];
 
+if ($method == 'POST') {
 
-if (isset($_POST['nom']) && isset($_POST['mdp'])) {
-    $nom = $_POST['nom'];
-    $mdp = $_POST['mdp'];
+  if ($_POST['nom'] == "") {
+    echo '<p class="danger">Prière d\'indiquer un nom</p>';
+  }
 
-    foreach($stagiaire as $s) {
-
-      if(($nom == $s['nom']) && ($mdp == $s['mdp'])) {
-
-        if($s['role'] === 'stagiaire') {
-        header('location:stagiaire_details.php?id='. $s['id'] .'');
-        return true;
-
-        }
-      }
-    }
-    $_SESSION['erreur'] = "<p style='color:red'>Identifiant ou mot de passe incorrect</p>";
-    header('location:index.php');
-
+  if (verifieIdentite($_POST, listeStagiaires())) {
+    echo 'Bonjour ' . $_POST['nom'];
+  } else {
+    echo 'stagiaire inconnu';
+  }
 }
+
 ?>
+<h2>Login</h2>
+
+<form method="post">
+  <div class="form-group">
+    <label for="">Nom</label>
+    <input class="form-control" type="text" name="nom" required>
+  </div>
+  <div class="form-group">
+    <label for="">Mot de passe</label>
+    <input class="form-control" type="password" name="password">
+  </div>
+  <input class="btn btn-primary" type="submit" value="Valider">
+</form>
+
+<?php include('footer.php')?>
